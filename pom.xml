@@ -8,11 +8,6 @@
     <artifactId>MyLogger</artifactId>
     <version>1.0</version>
 
-    <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
-    </properties>
-
     <dependencies>
         <!-- For Apache utils -->
         <dependency>
@@ -21,5 +16,11 @@
             <version>3.12.0</version>
         </dependency>
     </dependencies>
+
+    <properties>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>
