@@ -23,7 +23,7 @@ public static void main(String[]args) {
 
 Install with maven like this
 
-```maven
+```xml
 <dependency>
     <groupId>fr.florian.mylogger</groupId>
     <artifactId>MyLogger</artifactId>
