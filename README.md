@@ -11,12 +11,10 @@ Nice to have :
 Very simple !
 
 ```java
-public static void main(String[]args) {
-    MyLogger.debug(String message);
-    MyLogger.info(String message);
-    MyLogger.error(String message);
-    MyLogger.exit(String message);
-}
+MyLogger.debug(String message);
+MyLogger.info(String message);
+MyLogger.error(String message);
+MyLogger.exit(String message);
 ```
 
 ###How to install
@@ -35,8 +33,12 @@ Install with maven like this
 
 Change prefix with the name of your soft
 
-`MyLogger.setPrefix(String name);`
+```java
+MyLogger.setPrefix(String name);
+```
 
 Disable or enable color of prefix
 
-`MyLogger.setPrintColored(boolean printColored);`
+```java
+MyLogger.setPrintColored(boolean printColored);
+```
