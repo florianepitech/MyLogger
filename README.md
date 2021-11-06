@@ -8,7 +8,7 @@ Nice to add in future update :
  - Save log in database
  - Save logs in file
 
-###How to use
+### How to use
 
 Very simple !
 
@@ -29,7 +29,7 @@ Render
 ```
 
 
-###How to install
+### How to install
 
 Install with maven like that after cloned the repositorie
 
