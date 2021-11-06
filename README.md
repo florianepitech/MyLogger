@@ -23,8 +23,12 @@ public static void main(String[]args) {
 
 Install with maven like this
 
-```java
-
+```maven
+<dependency>
+    <groupId>fr.florian.mylogger</groupId>
+    <artifactId>MyLogger</artifactId>
+    <version>1.0</version>
+</dependency>
 ```
 
 ### Parameter
