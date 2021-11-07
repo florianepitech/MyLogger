@@ -4,9 +4,7 @@ It's just a simple logger very easy to use and easy to add in your project.
 
 Nice to add in future update :
  - Implement TelegramAPI !
- - Add more prefix
  - Save log in database
- - Save logs in file
 
 ### How to use
 
