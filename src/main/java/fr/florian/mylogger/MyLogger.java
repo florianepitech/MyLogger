@@ -2,6 +2,10 @@ package fr.florian.mylogger;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -15,43 +19,46 @@ public class MyLogger {
     private static ZoneId zoneId = ZoneId.systemDefault();
     private static BigInteger nextLine = new BigInteger("1");
     private static boolean printColored = true, printDebug = false;
+    private static boolean saveToFile = false;
+
+    private static String fileName = "mylogger-" + System.currentTimeMillis() + ".log";
 
     /*
      *      PUBLIC FUNCTION
      */
 
     public static void debug(String message) {
-        log(MyLoggerType.DEBUG, message);
+        log(MyLogType.DEBUG, message);
     }
 
     public static void info(String message) {
-        log(MyLoggerType.INFO, message);
+        log(MyLogType.INFO, message);
     }
 
     public static void error(String message) {
-        log(MyLoggerType.ERROR, message);
+        log(MyLogType.ERROR, message);
     }
 
     public static void error(Exception exception) {
-        log(MyLoggerType.ERROR, ExceptionUtils.getMessage(exception));
+        log(MyLogType.ERROR, ExceptionUtils.getMessage(exception));
     }
 
     public static void exit(String message) {
-        log(MyLoggerType.EXIT, message);
+        log(MyLogType.EXIT, message);
         System.exit(2);
     }
 
     public static void exit(String message, int exitCode) {
-        log(MyLoggerType.EXIT, message);
+        log(MyLogType.EXIT, message);
         System.exit(exitCode);
     }
 
     public static void success(String message) {
-        log(MyLoggerType.SUCCESS, message);
+        log(MyLogType.SUCCESS, message);
     }
 
     public static void fail(String message) {
-        log(MyLoggerType.FAIL, message);
+        log(MyLogType.FAIL, message);
     }
 
 
@@ -59,13 +66,28 @@ public class MyLogger {
      *      PRIVATE FUNCTION
      */
 
-    private synchronized static void log(MyLoggerType logType, String message) {
-        if (logType == MyLoggerType.DEBUG && printDebug == false) return;
+    private synchronized static void log(MyLogType logType, String message) {
+        if (logType == MyLogType.DEBUG && printDebug == false) return;
         ZonedDateTime now = ZonedDateTime.now(getZoneId());
         String messageTextTerminal = getNextLine() + " " +  PREFIX + " " + logType.getPrefixColored() + " " + getFormattedDate(now) + " : " + message;
         if (!isPrintColored()) messageTextTerminal = getNextLine() + " " +  PREFIX + " " + logType.getPrefix() + " " + getFormattedDate(now) + " : " + message;
         System.out.println(messageTextTerminal);
         nextLine = nextLine.add(new BigInteger("1"));
+        if (isSaveToFile()) saveLogToFile(logType, message);
+    }
+
+    private static void saveLogToFile(MyLogType logType, String message) {
+        ZonedDateTime now = ZonedDateTime.now(getZoneId());
+        String strtToAdd = getNextLine() + " " +  PREFIX + " " + logType.getPrefix() + " " + getFormattedDate(now) + " : " + message + "\n";
+        try {
+            File file = new File(fileName);
+            if (!file.exists()) file.createNewFile();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+            writer.append(strtToAdd);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -135,5 +157,13 @@ public class MyLogger {
 
     public static void setPrintDebug(boolean printDebug) {
         MyLogger.printDebug = printDebug;
+    }
+
+    public static boolean isSaveToFile() {
+        return saveToFile;
+    }
+
+    public static void setSaveToFile(boolean saveToFile) {
+        MyLogger.saveToFile = saveToFile;
     }
 }

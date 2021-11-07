@@ -1,6 +1,6 @@
 package fr.florian.mylogger;
 
-enum MyLoggerType {
+enum MyLogType {
 
     DEBUG("DEBUG",      "[DEBUG]   ", MyLoggerColor.ANSI_WHITE +    "[DEBUG]   " + MyLoggerColor.ANSI_RESET),
     INFO("INFO",        "[INFO]    ",MyLoggerColor.ANSI_YELLOW +    "[INFO]    " + MyLoggerColor.ANSI_RESET),
@@ -12,7 +12,7 @@ enum MyLoggerType {
     private String name, prefix, prefixColored;
     private boolean saveInDB;
 
-    MyLoggerType(String name, String prefix, String prefixTerminal) {
+    MyLogType(String name, String prefix, String prefixTerminal) {
         this.name = name;
         this.prefix = prefix;
         this.prefixColored = prefixTerminal;
