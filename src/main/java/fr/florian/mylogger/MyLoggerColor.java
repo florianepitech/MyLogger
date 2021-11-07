@@ -1,3 +1,5 @@
+package fr.florian.mylogger;
+
 public class MyLoggerColor {
 
     public static final String ANSI_RESET = "\u001B[0m";
