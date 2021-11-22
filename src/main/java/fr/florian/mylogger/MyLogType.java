@@ -1,52 +1,41 @@
 package fr.florian.mylogger;
 
-enum MyLogType {
+public enum MyLogType {
 
-    DEBUG("DEBUG",      "[DEBUG]   ", MyLoggerColor.ANSI_WHITE +    "[DEBUG]   " + MyLoggerColor.ANSI_RESET),
-    INFO("INFO",        "[INFO]    ",MyLoggerColor.ANSI_YELLOW +    "[INFO]    " + MyLoggerColor.ANSI_RESET),
-    ERROR("ERROR",      "[ERROR]   ", MyLoggerColor.ANSI_RED +      "[ERROR]   " + MyLoggerColor.ANSI_RESET),
-    EXIT("EXIT",        "[EXIT]    ",MyLoggerColor.ANSI_RED +       "[EXIT]    " + MyLoggerColor.ANSI_RESET),
-    SUCCESS("SUCCESS",  "[SUCCESS] ",MyLoggerColor.ANSI_GREEN +     "[SUCCESS] " + MyLoggerColor.ANSI_RESET),
-    FAIL("FAIL",        "[FAIL]    ",MyLoggerColor.ANSI_RED +       "[FAIL]    " + MyLoggerColor.ANSI_RESET);
+    DEBUG("DEBUG",      "DEBUG", MyLoggerColor.ANSI_WHITE, 1),
+    INFO("INFO",        "INFO ", MyLoggerColor.ANSI_YELLOW, 2),
+    ERROR("ERROR",      "ERROR", MyLoggerColor.ANSI_RED, 3),
+    EXIT("EXIT",        "EXIT ", MyLoggerColor.ANSI_RED, 4),
+    DONE("DONE",        "DONE ", MyLoggerColor.ANSI_GREEN, 5),
+    FAIL("FAIL",        "FAIL ", MyLoggerColor.ANSI_RED, 6);
 
-    private String name, prefix, prefixColored;
-    private boolean saveInDB;
+    private String name, prefix, color;
+    private int level;
 
-    MyLogType(String name, String prefix, String prefixTerminal) {
+    MyLogType(String name, String prefix, String color, int level) {
         this.name = name;
         this.prefix = prefix;
-        this.prefixColored = prefixTerminal;
+        this.color = color;
+        this.level = level;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPrefix() {
         return prefix;
     }
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getPrefixColored() {
-        return prefixColored;
-    }
-
-    public void setPrefixColored(String prefixColored) {
-        this.prefixColored = prefixColored;
-    }
-
-    public boolean isSaveInDB() {
-        return saveInDB;
-    }
-
-    public void setSaveInDB(boolean saveInDB) {
-        this.saveInDB = saveInDB;
+        return getColor() + getPrefix() + MyLoggerColor.ANSI_RESET;
     }
 }

@@ -1,3 +1,6 @@
+fr/florian/mylogger/MyLoggerSaver.class
+fr/florian/mylogger/MyLoggerFormatter.class
 fr/florian/mylogger/MyLoggerColor.class
 fr/florian/mylogger/MyLogger.class
+fr/florian/mylogger/MyLoggerUtils.class
 fr/florian/mylogger/MyLogType.class
