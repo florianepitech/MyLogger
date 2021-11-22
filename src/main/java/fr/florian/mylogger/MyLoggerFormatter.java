@@ -1,5 +1,7 @@
 package fr.florian.mylogger;
 
+import fr.florian.mylogger.enums.MyLogType;
+
 import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -8,7 +10,8 @@ import java.time.format.DateTimeFormatter;
 public class MyLoggerFormatter {
 
     private static String format = "{line} ({trace}) [{name}] [{type}] {date} : {message}";
-    private static String name = "LOGGER", version = null, processId = null;
+    private static String name = "LOGGER", version = null;
+    private static long processId = ProcessHandle.current().pid();
     private static String dateFormat = "yyyy-MM-dd HH:mm:ss.SSS";
     private static ZoneId zoneId = ZoneId.systemDefault();
     private static BigInteger nextLine = new BigInteger("1");
@@ -20,7 +23,7 @@ public class MyLoggerFormatter {
         result = result.replaceAll("\\{trace}", getFormattedTrace());
         result = result.replaceAll("\\{name}", name);
         result = result.replaceAll("\\{version}", version);
-        result = result.replaceAll("\\{process}", processId);
+        result = result.replaceAll("\\{process}", String.valueOf(processId));
         result = result.replaceAll("\\{type}", (colored) ? myLogType.getPrefixColored() : myLogType.getPrefix());
         result = result.replaceAll("\\{date}", getFormattedDate(zonedDateTime));
         result = result.replaceAll("\\{message}", message);

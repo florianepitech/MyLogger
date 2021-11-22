@@ -1,4 +1,6 @@
-package fr.florian.mylogger;
+package fr.florian.mylogger.enums;
+
+import fr.florian.mylogger.utils.MyLoggerColor;
 
 public enum MyLogType {
 

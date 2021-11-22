@@ -1,4 +1,4 @@
-package fr.florian.mylogger;
+package fr.florian.mylogger.saver;
 
 import java.time.ZonedDateTime;
 
@@ -48,6 +48,10 @@ public class MyLoggerSQL {
     }
 
     public static void deleteLogsAfter(ZonedDateTime zonedDateTime) {
+
+    }
+
+    public static void addLog() {
 
     }
 

@@ -1,21 +1,27 @@
 package fr.florian.mylogger;
 
+import fr.florian.mylogger.enums.MyLogType;
+import fr.florian.mylogger.saver.MyLoggerSaver;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyLogger {
 
     //Param
+    private static List<MyLoggerListener> listeners = new ArrayList<MyLoggerListener>();
     private static boolean printColored = true, printDebug = false;
+
+    /*
+     *      LISTENER
+     */
+
+    public static void registerListener(MyLoggerListener myLoggerListener) {
+        listeners.add(myLoggerListener);
+    }
 
     /*
      *      PUBLIC FUNCTION
@@ -66,6 +72,7 @@ public class MyLogger {
         System.out.println(messageTextTerminal);
         MyLoggerFormatter.setNextLine(MyLoggerFormatter.getNextLine().add(new BigInteger("1")));
         if (MyLoggerSaver.isSaveToFile()) MyLoggerSaver.saveLogToFile(MyLoggerFormatter.formatMessage(logType, now, message, false));
+        for (MyLoggerListener mll : listeners) mll.onLogEvent(messageTextTerminal);
     }
 
     /*

@@ -1,4 +1,4 @@
-package fr.florian.mylogger;
+package fr.florian.mylogger.utils;
 
 public class MyLoggerColor {
 

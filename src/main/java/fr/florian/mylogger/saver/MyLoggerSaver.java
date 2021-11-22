@@ -1,10 +1,9 @@
-package fr.florian.mylogger;
+package fr.florian.mylogger.saver;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 
 public class MyLoggerSaver {
 
