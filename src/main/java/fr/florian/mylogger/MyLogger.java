@@ -1,7 +1,7 @@
 package fr.florian.mylogger;
 
 import fr.florian.mylogger.enums.MyLogType;
-import fr.florian.mylogger.saver.MyLoggerSaver;
+import fr.florian.mylogger.saver.MyLoggerFile;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.math.BigInteger;
@@ -13,7 +13,7 @@ public class MyLogger {
 
     //Param
     private static List<MyLoggerListener> listeners = new ArrayList<MyLoggerListener>();
-    private static boolean printColored = true, printDebug = false;
+    private static boolean printColored = true;
 
     /*
      *      LISTENER
@@ -67,11 +67,14 @@ public class MyLogger {
      */
 
     private synchronized static void log(MyLogType logType, String message) {
+        if (message == null) message = "null";
         ZonedDateTime now = ZonedDateTime.now(MyLoggerFormatter.getZoneId());
         String messageTextTerminal = MyLoggerFormatter.formatMessage(logType, now, message, printColored);
         System.out.println(messageTextTerminal);
         MyLoggerFormatter.setNextLine(MyLoggerFormatter.getNextLine().add(new BigInteger("1")));
-        if (MyLoggerSaver.isSaveToFile()) MyLoggerSaver.saveLogToFile(MyLoggerFormatter.formatMessage(logType, now, message, false));
+        //save to file
+        if (MyLoggerFile.isSaveToFile()) MyLoggerFile.saveLogToFile(MyLoggerFormatter.formatMessage(logType, now, message, false));
+        //call listeners
         for (MyLoggerListener mll : listeners) mll.onLogEvent(messageTextTerminal);
     }
 
@@ -87,11 +90,4 @@ public class MyLogger {
         MyLogger.printColored = printColored;
     }
 
-    public static boolean isPrintDebug() {
-        return printDebug;
-    }
-
-    public static void setPrintDebug(boolean printDebug) {
-        MyLogger.printDebug = printDebug;
-    }
 }

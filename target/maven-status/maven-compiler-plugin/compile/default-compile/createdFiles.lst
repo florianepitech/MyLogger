@@ -1,7 +1,7 @@
 fr/florian/mylogger/MyLoggerListener.class
 fr/florian/mylogger/saver/MyLoggerNoSQL.class
 fr/florian/mylogger/MyLogger.class
-fr/florian/mylogger/saver/MyLoggerSaver.class
+fr/florian/mylogger/saver/MyLoggerFile.class
 fr/florian/mylogger/MyLoggerFormatter.class
 fr/florian/mylogger/saver/MyLoggerMailer.class
 fr/florian/mylogger/enums/MyLogType.class

@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class MyLoggerSaver {
+public class MyLoggerFile {
 
     private static boolean saveToFile = false;
     private static String fileName = "mylogger-" + System.currentTimeMillis() + ".log";
@@ -27,7 +27,7 @@ public class MyLoggerSaver {
     }
 
     public static void setSaveToFile(boolean saveToFile) {
-        MyLoggerSaver.saveToFile = saveToFile;
+        MyLoggerFile.saveToFile = saveToFile;
     }
 
     public static String getFileName() {
@@ -35,6 +35,6 @@ public class MyLoggerSaver {
     }
 
     public static void setFileName(String fileName) {
-        MyLoggerSaver.fileName = fileName;
+        MyLoggerFile.fileName = fileName;
     }
 }
