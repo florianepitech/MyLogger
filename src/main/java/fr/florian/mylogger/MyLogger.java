@@ -27,15 +27,15 @@ public class MyLogger {
      *      PUBLIC FUNCTION
      */
 
-    public static void debug(String message) {
+    public static void debug(Object message) {
         log(MyLogType.DEBUG, message);
     }
 
-    public static void info(String message) {
+    public static void info(Object message) {
         log(MyLogType.INFO, message);
     }
 
-    public static void error(String message) {
+    public static void error(Object message) {
         log(MyLogType.ERROR, message);
     }
 
@@ -43,21 +43,21 @@ public class MyLogger {
         log(MyLogType.ERROR, ExceptionUtils.getMessage(exception));
     }
 
-    public static void exit(String message) {
+    public static void exit(Object message) {
         log(MyLogType.EXIT, message);
         System.exit(2);
     }
 
-    public static void exit(String message, int exitCode) {
+    public static void exit(Object message, int exitCode) {
         log(MyLogType.EXIT, message);
         System.exit(exitCode);
     }
 
-    public static void done(String message) {
+    public static void done(Object message) {
         log(MyLogType.DONE, message);
     }
 
-    public static void fail(String message) {
+    public static void fail(Object message) {
         log(MyLogType.FAIL, message);
     }
 
@@ -66,14 +66,14 @@ public class MyLogger {
      *      PRIVATE FUNCTION
      */
 
-    private synchronized static void log(MyLogType logType, String message) {
+    private synchronized static void log(MyLogType logType, Object message) {
         if (message == null) message = "null";
         ZonedDateTime now = ZonedDateTime.now(MyLoggerFormatter.getZoneId());
-        String messageTextTerminal = MyLoggerFormatter.formatMessage(logType, now, message, printColored);
+        String messageTextTerminal = MyLoggerFormatter.formatMessage(logType, now, message.toString(), printColored);
         System.out.println(messageTextTerminal);
         MyLoggerFormatter.setNextLine(MyLoggerFormatter.getNextLine().add(new BigInteger("1")));
         //save to file
-        if (MyLoggerFile.isSaveToFile()) MyLoggerFile.saveLogToFile(MyLoggerFormatter.formatMessage(logType, now, message, false));
+        if (MyLoggerFile.isSaveToFile()) MyLoggerFile.saveLogToFile(MyLoggerFormatter.formatMessage(logType, now, message.toString(), false));
         //call listeners
         for (MyLoggerListener mll : listeners) mll.onLogEvent(messageTextTerminal);
     }
