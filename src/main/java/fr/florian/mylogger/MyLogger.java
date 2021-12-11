@@ -2,6 +2,7 @@ package fr.florian.mylogger;
 
 import fr.florian.mylogger.enums.MyLogType;
 import fr.florian.mylogger.saver.MyLoggerFile;
+import fr.florian.mylogger.saver.MyLoggerNoSQL;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.math.BigInteger;
@@ -27,12 +28,20 @@ public class MyLogger {
      *      PUBLIC FUNCTION
      */
 
+    public static void trace(Object message) {
+        log(MyLogType.TRACE, message);
+    }
+
     public static void debug(Object message) {
         log(MyLogType.DEBUG, message);
     }
 
     public static void info(Object message) {
         log(MyLogType.INFO, message);
+    }
+
+    public static void warn(Object message) {
+        log(MyLogType.WARN, message);
     }
 
     public static void error(Object message) {
@@ -43,22 +52,14 @@ public class MyLogger {
         log(MyLogType.ERROR, ExceptionUtils.getMessage(exception));
     }
 
-    public static void exit(Object message) {
-        log(MyLogType.EXIT, message);
+    public static void fatal(Object message) {
+        log(MyLogType.FATAL, message);
         System.exit(2);
     }
 
-    public static void exit(Object message, int exitCode) {
-        log(MyLogType.EXIT, message);
+    public static void fatal(Object message, int exitCode) {
+        log(MyLogType.FATAL, message);
         System.exit(exitCode);
-    }
-
-    public static void done(Object message) {
-        log(MyLogType.DONE, message);
-    }
-
-    public static void fail(Object message) {
-        log(MyLogType.FAIL, message);
     }
 
 
@@ -74,6 +75,13 @@ public class MyLogger {
         MyLoggerFormatter.setNextLine(MyLoggerFormatter.getNextLine().add(new BigInteger("1")));
         //save to file
         if (MyLoggerFile.isSaveToFile()) MyLoggerFile.saveLogToFile(MyLoggerFormatter.formatMessage(logType, now, message.toString(), false));
+        if (MyLoggerNoSQL.isStart()) {
+            try {
+                MyLoggerNoSQL.addLog(now, logType, message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         //call listeners
         for (MyLoggerListener mll : listeners) mll.onLogEvent(messageTextTerminal);
     }

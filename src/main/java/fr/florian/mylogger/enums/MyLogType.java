@@ -4,12 +4,12 @@ import fr.florian.mylogger.utils.MyLoggerColor;
 
 public enum MyLogType {
 
-    DEBUG("DEBUG",      "DEBUG", MyLoggerColor.ANSI_WHITE, 1),
-    INFO("INFO",        "INFO ", MyLoggerColor.ANSI_YELLOW, 2),
-    ERROR("ERROR",      "ERROR", MyLoggerColor.ANSI_RED, 3),
-    EXIT("EXIT",        "EXIT ", MyLoggerColor.ANSI_RED, 4),
-    DONE("DONE",        "DONE ", MyLoggerColor.ANSI_GREEN, 5),
-    FAIL("FAIL",        "FAIL ", MyLoggerColor.ANSI_RED, 6);
+    TRACE("TRACE", "TRACE", MyLoggerColor.WHITE, 1),
+    DEBUG("DEBUG", "DEBUG", MyLoggerColor.BLUE, 2),
+    INFO("INFO", "INFO ", MyLoggerColor.YELLOW, 3),
+    WARN("WARN", "WARN ", MyLoggerColor.RED, 4),
+    ERROR("ERROR", "ERROR", MyLoggerColor.RED, 5),
+    FATAL("FATAL", "FATAL", MyLoggerColor.RED_BOLD, 6);
 
     private String name, prefix, color;
     private int level;
@@ -37,7 +37,11 @@ public enum MyLogType {
         this.color = color;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public String getPrefixColored() {
-        return getColor() + getPrefix() + MyLoggerColor.ANSI_RESET;
+        return getColor() + getPrefix() + MyLoggerColor.RESET;
     }
 }
