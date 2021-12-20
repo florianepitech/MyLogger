@@ -7,6 +7,7 @@
     <groupId>fr.florian.tracex</groupId>
     <artifactId>TraceX</artifactId>
     <version>1.0</version>
+
     <build>
         <plugins>
             <plugin>
