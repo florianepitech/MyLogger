@@ -1,6 +1,6 @@
-package fr.florian.mylogger;
+package fr.florian.tracex;
 
-import fr.florian.mylogger.enums.MyLogType;
+import fr.florian.tracex.enums.MyLogType;
 
 import java.math.BigInteger;
 import java.time.ZoneId;

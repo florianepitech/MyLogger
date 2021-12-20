@@ -1,8 +1,8 @@
-package fr.florian.mylogger;
+package fr.florian.tracex;
 
-import fr.florian.mylogger.enums.MyLogType;
-import fr.florian.mylogger.saver.MyLoggerFile;
-import fr.florian.mylogger.saver.MyLoggerNoSQL;
+import fr.florian.tracex.enums.MyLogType;
+import fr.florian.tracex.saver.MyLoggerFile;
+import fr.florian.tracex.saver.MyLoggerNoSQL;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.math.BigInteger;

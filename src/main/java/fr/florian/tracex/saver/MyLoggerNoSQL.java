@@ -1,10 +1,10 @@
-package fr.florian.mylogger.saver;
+package fr.florian.tracex.saver;
 
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import fr.florian.mylogger.MyLoggerFormatter;
-import fr.florian.mylogger.enums.MyLogType;
+import fr.florian.tracex.MyLoggerFormatter;
+import fr.florian.tracex.enums.MyLogType;
 import org.bson.Document;
 import org.json.JSONObject;
 
@@ -45,7 +45,6 @@ public class MyLoggerNoSQL {
         mongoDatabase = null;
         mongoCollection = null;
         start = false;
-
     }
 
     private static void disableMongoLogger() {

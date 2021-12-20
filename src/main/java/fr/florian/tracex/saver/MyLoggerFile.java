@@ -1,4 +1,6 @@
-package fr.florian.mylogger.saver;
+package fr.florian.tracex.saver;
+
+import fr.florian.tracex.MyLoggerFormatter;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +10,7 @@ import java.io.IOException;
 public class MyLoggerFile {
 
     private static boolean saveToFile = false;
-    private static String fileName = "mylogger-" + System.currentTimeMillis() + ".log";
+    private static String fileName = MyLoggerFormatter.getName().toLowerCase() + "-" + System.currentTimeMillis() + ".log";
 
     public static void saveLogToFile(String messageToSave) {
         try {

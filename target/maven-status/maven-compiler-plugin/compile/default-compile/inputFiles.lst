@@ -1,9 +1,0 @@
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/enums/MyLogType.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/MyLoggerFormatter.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/utils/MyLoggerColor.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/saver/MyLoggerMailer.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/saver/MyLoggerNoSQL.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/MyLogger.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/saver/MyLoggerSQL.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/MyLoggerListener.java
-/Users/floriandamiot/Documents/IdeaProjects/MyLogger/src/main/java/fr/florian/mylogger/saver/MyLoggerFile.java

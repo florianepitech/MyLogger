@@ -1,4 +1,4 @@
-## MyLogger
+## TraceX
 
 It's just a simple logger very easy to use and easy to add in your project.
 
@@ -38,8 +38,9 @@ mvn install
 Add this into your pom.xml
 
 ```xml
+
 <dependency>
-    <groupId>fr.florian.mylogger</groupId>
+    <groupId>fr.florian.tracexfr.florian.tracex</groupId>
     <artifactId>MyLogger</artifactId>
     <version>1.0</version>
 </dependency>
