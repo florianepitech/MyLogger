@@ -8,7 +8,13 @@
                 <format>{line} ({trace}) [{name}] [{type}] {date} : {message}</format>
                 <line>1</line>
                 <colored>true</colored>
+                <priority>ALL</priority>
             </console>
+            <mongodb>
+                <url></url>
+                <database></database>
+                <collection></collection>
+            </mongodb>
             <file>
                 <name>TRACEX</name>
                 <format>{line} ({trace}) [{name}] [{type}] {date} : {message}</format>

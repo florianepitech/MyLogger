@@ -1,6 +1,7 @@
 package fr.florian.tracex;
 
 import fr.florian.tracex.appenders.ConsoleAppender;
+import fr.florian.tracex.appenders.MongoAppender;
 import fr.florian.tracex.exceptions.UnknownPackageException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -64,7 +65,7 @@ class ConfigurationFile {
             if (nodeChild.getNodeType() == Node.ELEMENT_NODE) {
                 if (nodeChild.getNodeName().equals("package")) {
                     String packageName = nodeChild.getTextContent();
-                    return new TraceX(packageName);
+                    return TraceX.getInstance(packageName);
                 }
             }
         }
@@ -86,9 +87,9 @@ class ConfigurationFile {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node nodeChild = nodes.item(i);
             if (nodeChild.getNodeName().equals("console")) {
-                new ConsoleAppender(traceX, nodeChild.getChildNodes());
+                traceX.registerListener(new ConsoleAppender(nodeChild.getChildNodes()));
             } else if (nodeChild.getNodeName().equals("mongodb")) {
-
+                new MongoAppender(traceX, nodeChild.getChildNodes());
             } else if (nodeChild.getNodeName().equals("file")) {
 
             } else if (nodeChild.getNodeName().equals("sql")) {

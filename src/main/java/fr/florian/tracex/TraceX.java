@@ -2,48 +2,63 @@ package fr.florian.tracex;
 
 import fr.florian.tracex.enums.Priority;
 import fr.florian.tracex.exceptions.UnknownPackageException;
-import fr.florian.tracex.objects.TraceXMessage;
+import fr.florian.tracex.objects.TraceMessage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TraceX {
 
+    private static List<TraceX> loggers = new ArrayList<>();
+
+    private List<TraceListener> listeners = new ArrayList<TraceListener>();
     private Package p;
 
     /*
      *      CONSTRUCTOR
      */
 
-    public TraceX(Package p) {
-        TraceXCore.addTraceX(this);
+    private TraceX(Package p) {
         this.p = p;
-    }
-
-    public TraceX(String packageName) throws UnknownPackageException {
-        Package[] packages = Package.getPackages();
-        for (Package p : packages) {
-            if (p.getName().equals(packageName)) {
-                TraceXCore.addTraceX(this);
-                this.p = p;
-                return;
-            }
-        }
-        throw new UnknownPackageException(packageName);
-    }
-
-    public TraceX(Class c) {
-        Package p = c.getPackage();
-        TraceXCore.addTraceX(this);
-        this.p = c.getPackage();
+        loggers.add(this);
     }
 
     /*
      *      STATIC FUNCTION
      */
+
+    public static TraceX getInstance(Package p) {
+        for (TraceX traceX : loggers) {
+            if (p.equals(traceX.getPackage())) return traceX;
+        }
+        return new TraceX(p);
+    }
+
+    public static TraceX getInstance(Class c) {
+        return getInstance(c.getPackage());
+    }
+
+    public static TraceX getInstance(String packageName) throws UnknownPackageException {
+        Package p = getPackage(packageName);
+        if (p == null) throw new UnknownPackageException(packageName);
+        return getInstance(p);
+    }
+
+    private static Package getPackage(String packageName) {
+        for (Package p : Package.getPackages()) {
+            if (p.getName().equals(packageName)) return p;
+        }
+        return null;
+    }
+
+    private static void addTraceX(TraceX traceX) {
+        if (!loggers.contains(traceX)) loggers.add(traceX);
+    }
 
     public static void readConfigurationFile(String filePath) throws ParserConfigurationException, IOException, URISyntaxException, SAXException, UnknownPackageException {
         ConfigurationFile.readConfiguration(filePath);
@@ -93,14 +108,30 @@ public class TraceX {
      *      PRIVATE FUNCTION
      */
 
-    private synchronized void log(Priority logType, Object message) {
-        TraceXMessage traceXMessage = new TraceXMessage(logType, message);
-        for (TraceXListener txl : TraceXCore.getListeners()) txl.onLogEvent(traceXMessage);
+    private void log(Priority logType, Object message) {
+        TraceMessage traceMessage = new TraceMessage(logType, message);
+        for (TraceListener txl : getListeners()) txl.onLogEvent(traceMessage);
+    }
+
+    /*
+     *      LISTENER
+     */
+
+    public void registerListener(TraceListener traceListener) {
+        listeners.add(traceListener);
     }
 
     /*
      *      GETTER
      */
+
+    public static List<TraceX> getAll() {
+        return loggers;
+    }
+
+    public List<TraceListener> getListeners() {
+        return listeners;
+    }
 
     public Package getPackage() {
         return p;

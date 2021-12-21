@@ -1,40 +1,35 @@
 package fr.florian.tracex.appenders;
 
 import fr.florian.tracex.TraceX;
-import fr.florian.tracex.TraceXCore;
-import fr.florian.tracex.TraceXListener;
+import fr.florian.tracex.TraceListener;
 import fr.florian.tracex.enums.Priority;
-import fr.florian.tracex.objects.TraceXMessage;
-import fr.florian.tracex.utils.ConsoleColors;
-import org.w3c.dom.Element;
+import fr.florian.tracex.objects.TraceMessage;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.lang.model.util.Elements;
 import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ConsoleAppender implements TraceXListener {
+public class ConsoleAppender implements TraceListener {
 
     private TraceX traceX;
-    private Priority traceXLevel = Priority.ALL;
+    private Priority priority = Priority.ERROR;
 
-    private static boolean colored = true;
-    private static String format = "{line} ({trace}) [{name}] [{type}] {date} : {message}";
-    private static String name = "LOGGER", version = null;
-    private static long processId = ProcessHandle.current().pid();
-    private static String dateFormat = "yyyy-MM-dd HH:mm:ss.SSS";
-    private static ZoneId zoneId = ZoneId.systemDefault();
-    private static BigInteger nextLine = new BigInteger("1");
+    private boolean colored = true;
+    private String format = "{line} ({trace}) [{name}] [{type}] {date} : {message}";
+    private String name = "LOGGER", version = null;
+    private long processId = ProcessHandle.current().pid();
+    private String dateFormat = "yyyy-MM-dd HH:mm:ss.SSS";
+    private ZoneId zoneId = ZoneId.systemDefault();
+    private BigInteger nextLine = new BigInteger("1");
 
-    public ConsoleAppender(TraceX traceX) {
-        TraceXCore.registerListener(this);
+    public ConsoleAppender() {
+
     }
 
-    public ConsoleAppender(TraceX traceX, NodeList nodeList) {
-        TraceXCore.registerListener(this);
+    public ConsoleAppender(NodeList nodeList) {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node nodeAt = nodeList.item(i);
             if (nodeAt.getNodeType() == Node.ELEMENT_NODE
@@ -48,14 +43,17 @@ public class ConsoleAppender implements TraceXListener {
                     setNextLine(new BigInteger(nodeAt.getTextContent()));
                 } else if (nodeAt.getNodeName().equals("colored")) {
                     setColored(Boolean.parseBoolean(nodeAt.getTextContent()));
+                } else if (nodeAt.getNodeName().equals("priority")) {
+                    Priority priority = Priority.getPriority(nodeAt.getTextContent());
+                    if (priority != null) setPriority(priority);
                 }
             }
         }
     }
 
     @Override
-    public void onLogEvent(TraceXMessage message) {
-        if (message.getPriority().getLevel() < getTraceXLevel().getLevel()) return;
+    public void onLogEvent(TraceMessage message) {
+        if (message.getPriority().getLevel() < getPriority().getLevel()) return;
         String messageStr = (message.getData() != null) ? message.getData().toString() : "null";
         String result = format;
         result = result.replaceAll("\\{line}", nextLine.toString());
@@ -70,13 +68,13 @@ public class ConsoleAppender implements TraceXListener {
         nextLine = nextLine.add(new BigInteger("1"));
     }
 
-    private static String getFormattedTrace() {
+    private String getFormattedTrace() {
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         StackTraceElement stackTraceElement = stackTraceElements[5];
         return stackTraceElement.getFileName() + ":" + stackTraceElement.getMethodName() + ":" + stackTraceElement.getLineNumber();
     }
 
-    private static String getFormattedDate(ZonedDateTime date) {
+    private String getFormattedDate(ZonedDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getDateFormat());
         return formatter.format(date);
     }
@@ -93,75 +91,75 @@ public class ConsoleAppender implements TraceXListener {
         this.traceX = traceX;
     }
 
-    public Priority getTraceXLevel() {
-        return traceXLevel;
+    public Priority getPriority() {
+        return priority;
     }
 
     public void setPriority(Priority priority) {
-        this.traceXLevel = priority;
+        this.priority = priority;
     }
 
-    public static boolean isColored() {
+    public boolean isColored() {
         return colored;
     }
 
-    public static void setColored(boolean colored) {
-        ConsoleAppender.colored = colored;
+    public void setColored(boolean colored) {
+        this.colored = colored;
     }
 
-    public static String getFormat() {
+    public String getFormat() {
         return format;
     }
 
-    public static void setFormat(String format) {
-        ConsoleAppender.format = format;
+    public void setFormat(String format) {
+        this.format = format;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
-    public static void setName(String name) {
-        ConsoleAppender.name = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public static String getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public static void setVersion(String version) {
-        ConsoleAppender.version = version;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
-    public static long getProcessId() {
+    public long getProcessId() {
         return processId;
     }
 
-    public static void setProcessId(long processId) {
-        ConsoleAppender.processId = processId;
+    public void setProcessId(long processId) {
+        this.processId = processId;
     }
 
-    public static String getDateFormat() {
+    public String getDateFormat() {
         return dateFormat;
     }
 
-    public static void setDateFormat(String dateFormat) {
-        ConsoleAppender.dateFormat = dateFormat;
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
     }
 
-    public static ZoneId getZoneId() {
+    public ZoneId getZoneId() {
         return zoneId;
     }
 
-    public static void setZoneId(ZoneId zoneId) {
-        ConsoleAppender.zoneId = zoneId;
+    public void setZoneId(ZoneId zoneId) {
+        this.zoneId = zoneId;
     }
 
-    public static BigInteger getNextLine() {
+    public BigInteger getNextLine() {
         return nextLine;
     }
 
-    public static void setNextLine(BigInteger nextLine) {
-        ConsoleAppender.nextLine = nextLine;
+    public void setNextLine(BigInteger nextLine) {
+        this.nextLine = nextLine;
     }
 }

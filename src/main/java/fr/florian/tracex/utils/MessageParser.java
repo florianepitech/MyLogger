@@ -1,6 +1,6 @@
 package fr.florian.tracex.utils;
 
-import fr.florian.tracex.objects.TraceXMessage;
+import fr.florian.tracex.objects.TraceMessage;
 
 public class MessageParser {
 
@@ -8,7 +8,7 @@ public class MessageParser {
         return null;
     }
 
-    public static final String parseMessage(TraceXMessage traceXMessage, String format) {
+    public static final String parseMessage(TraceMessage traceMessage, String format) {
         return null;
     }
 

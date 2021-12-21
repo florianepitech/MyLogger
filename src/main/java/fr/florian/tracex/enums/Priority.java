@@ -2,6 +2,11 @@ package fr.florian.tracex.enums;
 
 import fr.florian.tracex.utils.ConsoleColors;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public enum Priority {
 
     ALL("ALL", "ALL  ", ConsoleColors.BLACK, 0),
@@ -20,6 +25,14 @@ public enum Priority {
         this.prefix = prefix;
         this.color = color;
         this.level = level;
+    }
+
+    public static Priority getPriority(String name) {
+        List<Priority> priorities = Arrays.asList(Priority.values());
+        for (Priority priority : priorities) {
+            if (priority.getName().equals(name)) return priority;
+        }
+        return null;
     }
 
     public String getName() {

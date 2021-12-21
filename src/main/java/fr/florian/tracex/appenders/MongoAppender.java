@@ -3,16 +3,19 @@ package fr.florian.tracex.appenders;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import fr.florian.tracex.TraceX;
+import fr.florian.tracex.TraceListener;
 import fr.florian.tracex.enums.Priority;
+import fr.florian.tracex.objects.TraceMessage;
 import org.bson.Document;
 import org.json.JSONObject;
+import org.w3c.dom.NodeList;
 
 import java.sql.Date;
-import java.time.ZonedDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MongoAppender {
+public class MongoAppender implements TraceListener {
 
     private static boolean start = false;
     private static String mongoUrl, databaseName, collectionName;
@@ -22,7 +25,15 @@ public class MongoAppender {
     private static MongoDatabase mongoDatabase;
     private static MongoCollection mongoCollection;
 
-    public static void setConfiguration(String mongoUrl, String databaseName, String collectionName) {
+    public MongoAppender(TraceX traceX, String mongoUrl, String databaseName, String collectionName) {
+
+    }
+
+    public MongoAppender(TraceX traceX, NodeList nodeList) {
+
+    }
+
+    public static void setConfiguration() {
         MongoAppender.mongoUrl = mongoUrl;
         MongoAppender.databaseName = databaseName;
         MongoAppender.collectionName = collectionName;
@@ -56,14 +67,14 @@ public class MongoAppender {
      *      LOG
      */
 
-    public static void addLog(ZonedDateTime zonedDateTime, Priority logType, Object message) throws Exception {
-        if (logType.getLevel() < getSaveLevel()) return;
-        if (start == false) throw new Exception("you must start the mongodb logger before sending some information");
+    @Override
+    public void onLogEvent(TraceMessage message) {
+        if (message.getPriority().getLevel() < getSaveLevel()) return;
         Document document = new Document();
-        document.append("type", logType.getName());
+        document.append("type", message.getPriority().getName());
         document.append("pid", ProcessHandle.current().pid());
-        document.append("date", Date.from(zonedDateTime.toInstant()));
-        if (message instanceof JSONObject) {
+        document.append("date", Date.from(message.getZonedDateTime().toInstant()));
+        if (message.getData() instanceof JSONObject) {
             document.append("message", Document.parse(message.toString()));
         } else {
             document.append("message", message.toString());

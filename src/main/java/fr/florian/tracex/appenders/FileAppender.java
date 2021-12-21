@@ -1,30 +1,28 @@
 package fr.florian.tracex.appenders;
 
-import fr.florian.tracex.TraceXCore;
-import fr.florian.tracex.TraceXListener;
-import fr.florian.tracex.objects.TraceXMessage;
+import fr.florian.tracex.TraceListener;
+import fr.florian.tracex.objects.TraceMessage;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class FileAppender implements TraceXListener {
+public class FileAppender implements TraceListener {
 
     private static boolean saveToFile = false;
     private static String fileName = "tracex-" + System.currentTimeMillis() + ".log";
 
     public FileAppender(String name) {
-        TraceXCore.registerListener(this);
         this.fileName = name + ".log";
     }
 
     public FileAppender() {
-        TraceXCore.registerListener(this);
+
     }
 
     @Override
-    public void onLogEvent(TraceXMessage message) {
+    public void onLogEvent(TraceMessage message) {
 
     }
 
