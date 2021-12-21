@@ -1,8 +1,8 @@
-package fr.florian.tracex.saver;
+package fr.florian.tracex.appenders;
 
 import java.time.ZonedDateTime;
 
-public class MyLoggerSQL {
+public class SqlAppender {
 
     private static String tableName;
     private static String host, database, user, password;
@@ -17,14 +17,14 @@ public class MyLoggerSQL {
     }
 
     public static void setConfiguration(String host, String database, String user, String password) {
-        MyLoggerSQL.host = host;
-        MyLoggerSQL.database = database;
-        MyLoggerSQL.user = user;
-        MyLoggerSQL.password = password;
+        SqlAppender.host = host;
+        SqlAppender.database = database;
+        SqlAppender.user = user;
+        SqlAppender.password = password;
     }
 
     public static void setTableName(String tableName) {
-        MyLoggerSQL.tableName = tableName;
+        SqlAppender.tableName = tableName;
     }
 
     private static boolean tableExist() {

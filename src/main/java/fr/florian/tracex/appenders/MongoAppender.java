@@ -1,18 +1,18 @@
-package fr.florian.tracex.saver;
+package fr.florian.tracex.appenders;
 
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import fr.florian.tracex.MyLoggerFormatter;
-import fr.florian.tracex.enums.MyLogType;
+import fr.florian.tracex.enums.Priority;
 import org.bson.Document;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.time.ZonedDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MyLoggerNoSQL {
+public class MongoAppender {
 
     private static boolean start = false;
     private static String mongoUrl, databaseName, collectionName;
@@ -23,9 +23,9 @@ public class MyLoggerNoSQL {
     private static MongoCollection mongoCollection;
 
     public static void setConfiguration(String mongoUrl, String databaseName, String collectionName) {
-        MyLoggerNoSQL.mongoUrl = mongoUrl;
-        MyLoggerNoSQL.databaseName = databaseName;
-        MyLoggerNoSQL.collectionName = collectionName;
+        MongoAppender.mongoUrl = mongoUrl;
+        MongoAppender.databaseName = databaseName;
+        MongoAppender.collectionName = collectionName;
     }
 
     public static void start() throws Exception {
@@ -33,7 +33,7 @@ public class MyLoggerNoSQL {
         if (mongoUrl == null || databaseName == null || collectionName == null)
             throw new Exception("you must configure the mongodb informations before launching the logger");
         disableMongoLogger();
-        mongoClient = new MongoClient(new MongoClientURI(MyLoggerNoSQL.mongoUrl));
+        mongoClient = new MongoClient(new MongoClientURI(MongoAppender.mongoUrl));
         mongoDatabase = mongoClient.getDatabase(databaseName);
         mongoCollection = mongoDatabase.getCollection(collectionName);
         start = true;
@@ -56,14 +56,13 @@ public class MyLoggerNoSQL {
      *      LOG
      */
 
-    public static void addLog(ZonedDateTime zonedDateTime, MyLogType logType, Object message) throws Exception {
+    public static void addLog(ZonedDateTime zonedDateTime, Priority logType, Object message) throws Exception {
         if (logType.getLevel() < getSaveLevel()) return;
         if (start == false) throw new Exception("you must start the mongodb logger before sending some information");
         Document document = new Document();
-        document.append("name", MyLoggerFormatter.getName());
         document.append("type", logType.getName());
         document.append("pid", ProcessHandle.current().pid());
-        document.append("date", zonedDateTime.toString());
+        document.append("date", Date.from(zonedDateTime.toInstant()));
         if (message instanceof JSONObject) {
             document.append("message", Document.parse(message.toString()));
         } else {
@@ -112,11 +111,11 @@ public class MyLoggerNoSQL {
         return saveLevel;
     }
 
-    public static void setSaveLevel(MyLogType logType) {
-        MyLoggerNoSQL.saveLevel = logType.getLevel();
+    public static void setSaveLevel(Priority logType) {
+        MongoAppender.saveLevel = logType.getLevel();
     }
 
     public static void setSaveLevel(int saveLevel) {
-        MyLoggerNoSQL.saveLevel = saveLevel;
+        MongoAppender.saveLevel = saveLevel;
     }
 }

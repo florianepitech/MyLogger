@@ -1,20 +1,21 @@
 package fr.florian.tracex.enums;
 
-import fr.florian.tracex.utils.MyLoggerColor;
+import fr.florian.tracex.utils.ConsoleColors;
 
-public enum MyLogType {
+public enum Priority {
 
-    TRACE("TRACE", "TRACE", MyLoggerColor.WHITE, 1),
-    DEBUG("DEBUG", "DEBUG", MyLoggerColor.BLUE, 2),
-    INFO("INFO", "INFO ", MyLoggerColor.YELLOW, 3),
-    WARN("WARN", "WARN ", MyLoggerColor.RED, 4),
-    ERROR("ERROR", "ERROR", MyLoggerColor.RED, 5),
-    FATAL("FATAL", "FATAL", MyLoggerColor.RED_BOLD, 6);
+    ALL("ALL", "ALL  ", ConsoleColors.BLACK, 0),
+    TRACE("TRACE", "TRACE", ConsoleColors.WHITE, 1),
+    DEBUG("DEBUG", "DEBUG", ConsoleColors.BLUE, 2),
+    INFO("INFO", "INFO ", ConsoleColors.YELLOW, 3),
+    WARN("WARN", "WARN ", ConsoleColors.RED, 4),
+    ERROR("ERROR", "ERROR", ConsoleColors.RED, 5),
+    FATAL("FATAL", "FATAL", ConsoleColors.RED_BOLD, 6);
 
     private String name, prefix, color;
     private int level;
 
-    MyLogType(String name, String prefix, String color, int level) {
+    Priority(String name, String prefix, String color, int level) {
         this.name = name;
         this.prefix = prefix;
         this.color = color;
@@ -42,6 +43,6 @@ public enum MyLogType {
     }
 
     public String getPrefixColored() {
-        return getColor() + getPrefix() + MyLoggerColor.RESET;
+        return getColor() + getPrefix() + ConsoleColors.RESET;
     }
 }

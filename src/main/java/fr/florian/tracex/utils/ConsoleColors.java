@@ -1,6 +1,6 @@
 package fr.florian.tracex.utils;
 
-public class MyLoggerColor {
+public class ConsoleColors {
 
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset
