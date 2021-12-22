@@ -25,77 +25,79 @@ class ConfigurationFile {
         Document document = db.parse(new File(fileName));
         document.getDocumentElement().normalize();
 
-        NodeList loggers = getLoggers(document);
-        List<Node> loggerList = getLoggerList(loggers);
-        readLogger(loggerList);
+        NodeList loggers = document.getDocumentElement().getChildNodes();
+        //for each "logger"
+        for (int i = 0; i < loggers.getLength(); i++) {
+            //for each "configuration"
+            TraceX traceX = null;
+            List<Node> loggerList = getChildNodes(loggers.item(i), "configuration");
+            for (Node nodeTemp : loggerList) {
+                traceX = parseTraceX(nodeTemp);
+            }
+            //if traceX != null, then configure each appenders
+            if (traceX != null) {
+                List<Node> appenderList = getChildNodes(loggers.item(i), "appenders");
+                for (Node n : appenderList) {
+                    parseAppenders(traceX, n);
+                }
+            }
+        }
     }
 
     /*
      *      PRIVATE FUNCTION
      */
 
-    private static NodeList getLoggers(Document document) {
-        return document.getDocumentElement().getChildNodes();
+    private static TraceX parseTraceX(Node node) throws UnknownPackageException {
+        String packageName = getNodeString(node, "package");
+        String appName = getNodeString(node, "name");
+        String appVersion = getNodeString(node, "version");
+        TraceX traceX = TraceX.getInstance(packageName);
+        if (appName != null) traceX.setAppName(appName);
+        if (appVersion != null) traceX.setAppVersion(appVersion);
+        return traceX;
     }
 
-    public static List<Node> getLoggerList(NodeList nodeList) {
-        List<Node> result = new ArrayList<Node>();
+    private static void parseAppenders(TraceX traceX, Node node) {
+        NodeList nodeList = node.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node.getNodeName().equals("logger")) result.add(node);
+            Node nodeTemp = nodeList.item(i);
+            if (nodeTemp.getNodeType() == Node.ELEMENT_NODE) {
+                String appenderName = nodeTemp.getNodeName();
+                if (appenderName.equals("console")) {
+                    traceX.registerListener(new ConsoleAppender(traceX, nodeTemp));
+                } else if (appenderName.equals("mongodb")) {
+
+                } else if (appenderName.equals("file")) {
+
+                }
+            }
+        }
+    }
+
+    /*
+     *      XML UTILS
+     */
+
+    private static List<Node> getChildNodes(Node node, String name) {
+        List<Node> result = new ArrayList<>();
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node nodeChild = nodeList.item(i);
+            if (nodeChild.getNodeName().equals(name)) result.add(nodeChild);
         }
         return result;
     }
 
-    private static void readLogger(List<Node> nodes) throws UnknownPackageException {
-        for (Node node : nodes) {
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                if (node.getNodeName().equals("logger")) {
-                    TraceX traceX = parseLogger(node);
-                    if (traceX != null) parseAppenders(traceX, node);
-                }
-            }
-        }
-    }
-
-    private static TraceX parseLogger(Node node) throws UnknownPackageException {
-        NodeList nodes = node.getChildNodes();
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node nodeChild = nodes.item(i);
+    private static String getNodeString(Node node, String name) {
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node nodeChild = nodeList.item(i);
             if (nodeChild.getNodeType() == Node.ELEMENT_NODE) {
-                if (nodeChild.getNodeName().equals("package")) {
-                    String packageName = nodeChild.getTextContent();
-                    return TraceX.getInstance(packageName);
-                }
+                if (nodeChild.getNodeName().equals(name)) return nodeChild.getTextContent();
             }
         }
         return null;
-    }
-
-    private static void parseAppenders(TraceX traceX, Node node) {
-        NodeList nodes = node.getChildNodes();
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node nodeChild = nodes.item(i);
-            if (nodeChild.getNodeName().equals("appenders")) {
-                redirectAppenders(traceX, nodeChild);
-            }
-        }
-    }
-
-    private static void redirectAppenders(TraceX traceX, Node node) {
-        NodeList nodes = node.getChildNodes();
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node nodeChild = nodes.item(i);
-            if (nodeChild.getNodeName().equals("console")) {
-                traceX.registerListener(new ConsoleAppender(nodeChild.getChildNodes()));
-            } else if (nodeChild.getNodeName().equals("mongodb")) {
-                new MongoAppender(traceX, nodeChild.getChildNodes());
-            } else if (nodeChild.getNodeName().equals("file")) {
-
-            } else if (nodeChild.getNodeName().equals("sql")) {
-
-            }
-        }
     }
 
 }

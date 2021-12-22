@@ -5,7 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import fr.florian.tracex.TraceX;
 import fr.florian.tracex.TraceListener;
-import fr.florian.tracex.enums.Priority;
+import fr.florian.tracex.priority.Priority;
 import fr.florian.tracex.objects.TraceMessage;
 import org.bson.Document;
 import org.json.JSONObject;
@@ -69,9 +69,9 @@ public class MongoAppender implements TraceListener {
 
     @Override
     public void onLogEvent(TraceMessage message) {
-        if (message.getPriority().getLevel() < getSaveLevel()) return;
+        if (message.getCustomPriority().getLevel() < getSaveLevel()) return;
         Document document = new Document();
-        document.append("type", message.getPriority().getName());
+        document.append("type", message.getCustomPriority().getName());
         document.append("pid", ProcessHandle.current().pid());
         document.append("date", Date.from(message.getZonedDateTime().toInstant()));
         if (message.getData() instanceof JSONObject) {

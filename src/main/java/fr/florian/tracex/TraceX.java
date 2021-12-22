@@ -1,6 +1,7 @@
 package fr.florian.tracex;
 
-import fr.florian.tracex.enums.Priority;
+import fr.florian.tracex.priority.CustomPriority;
+import fr.florian.tracex.priority.Priority;
 import fr.florian.tracex.exceptions.UnknownPackageException;
 import fr.florian.tracex.objects.TraceMessage;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -16,6 +17,7 @@ public class TraceX {
 
     private static List<TraceX> loggers = new ArrayList<>();
 
+    private String appName = "TRACE-X", appVersion = "1";
     private List<TraceListener> listeners = new ArrayList<TraceListener>();
     private Package p;
 
@@ -52,6 +54,7 @@ public class TraceX {
     private static Package getPackage(String packageName) {
         for (Package p : Package.getPackages()) {
             if (p.getName().equals(packageName)) return p;
+            if (p.getName().startsWith(packageName)) return p;
         }
         return null;
     }
@@ -68,38 +71,40 @@ public class TraceX {
      *      PUBLIC FUNCTION
      */
 
+    public void log(CustomPriority customPriority, Object message) {
+        sendLog(customPriority, message);
+    }
+
     public void trace(Object message) {
-        log(Priority.TRACE, message);
+        sendLog(Priority.TRACE.toCustomPriority(), message);
     }
 
     public void debug(Object message) {
-        log(Priority.DEBUG, message);
+        sendLog(Priority.DEBUG.toCustomPriority(), message);
     }
 
     public void info(Object message) {
-        log(Priority.INFO, message);
+        sendLog(Priority.INFO.toCustomPriority(), message);
     }
 
     public void warn(Object message) {
-        log(Priority.WARN, message);
+        sendLog(Priority.WARN.toCustomPriority(), message);
     }
 
     public void error(Object message) {
-        log(Priority.ERROR, message);
+        sendLog(Priority.ERROR.toCustomPriority(), message);
     }
 
     public void error(Exception exception) {
-        log(Priority.ERROR, ExceptionUtils.getMessage(exception));
-        exception.printStackTrace();
+        sendLog(Priority.ERROR.toCustomPriority(), exception);
     }
 
     public void fatal(Object message) {
-        log(Priority.FATAL, message);
-        System.exit(2);
+        sendLog(Priority.FATAL.toCustomPriority(), message);
     }
 
     public void fatal(Object message, int exitCode) {
-        log(Priority.FATAL, message);
+        sendLog(Priority.FATAL.toCustomPriority(), message);
         System.exit(exitCode);
     }
 
@@ -108,8 +113,8 @@ public class TraceX {
      *      PRIVATE FUNCTION
      */
 
-    private void log(Priority logType, Object message) {
-        TraceMessage traceMessage = new TraceMessage(logType, message);
+    private void sendLog(CustomPriority customPriority, Object message) {
+        TraceMessage traceMessage = new TraceMessage(customPriority, message);
         for (TraceListener txl : getListeners()) txl.onLogEvent(traceMessage);
     }
 
@@ -135,5 +140,21 @@ public class TraceX {
 
     public Package getPackage() {
         return p;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
     }
 }

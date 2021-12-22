@@ -1,23 +1,23 @@
 package fr.florian.tracex.objects;
 
-import fr.florian.tracex.enums.Priority;
+import fr.florian.tracex.priority.CustomPriority;
 
 import java.time.ZonedDateTime;
 
 public class TraceMessage {
 
-    private Priority traceXLevel;
+    private CustomPriority customPriority;
     private Object data;
     private ZonedDateTime zonedDateTime;
 
-    public TraceMessage(Priority traceXLevel, Object data) {
-        this.traceXLevel = traceXLevel;
+    public TraceMessage(CustomPriority customPriority, Object data) {
+        this.customPriority = customPriority;
         this.data = data;
         this.zonedDateTime = ZonedDateTime.now();
     }
 
-    public TraceMessage(Priority priority, Object data, ZonedDateTime zonedDateTime) {
-        this.traceXLevel = priority;
+    public TraceMessage(CustomPriority customPriority, Object data, ZonedDateTime zonedDateTime) {
+        this.customPriority = customPriority;
         this.data = data;
         this.zonedDateTime = zonedDateTime;
     }
@@ -26,8 +26,8 @@ public class TraceMessage {
      *      GETTER
      */
 
-    public Priority getPriority() {
-        return traceXLevel;
+    public CustomPriority getCustomPriority() {
+        return customPriority;
     }
 
     public Object getData() {

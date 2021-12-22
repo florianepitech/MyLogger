@@ -1,28 +1,26 @@
-package fr.florian.tracex.enums;
+package fr.florian.tracex.priority;
 
 import fr.florian.tracex.utils.ConsoleColors;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public enum Priority {
 
-    ALL("ALL", "ALL  ", ConsoleColors.BLACK, 0),
-    TRACE("TRACE", "TRACE", ConsoleColors.WHITE, 1),
-    DEBUG("DEBUG", "DEBUG", ConsoleColors.BLUE, 2),
-    INFO("INFO", "INFO ", ConsoleColors.YELLOW, 3),
-    WARN("WARN", "WARN ", ConsoleColors.RED, 4),
-    ERROR("ERROR", "ERROR", ConsoleColors.RED, 5),
-    FATAL("FATAL", "FATAL", ConsoleColors.RED_BOLD, 6);
+    ALL("ALL", ConsoleColors.BLACK, 0),
+    TRACE("TRACE", ConsoleColors.WHITE, 100),
+    DEBUG("DEBUG", ConsoleColors.BLUE, 200),
+    INFO("INFO", ConsoleColors.YELLOW, 300),
+    WARN("WARN", ConsoleColors.RED, 400),
+    ERROR("ERROR", ConsoleColors.RED, 500),
+    FATAL("FATAL", ConsoleColors.RED_BOLD, 600);
 
     private String name, prefix, color;
     private int level;
 
-    Priority(String name, String prefix, String color, int level) {
+    Priority(String name, String color, int level) {
         this.name = name;
-        this.prefix = prefix;
+        this.prefix = String.format("%-5s", name);
         this.color = color;
         this.level = level;
     }
@@ -35,6 +33,18 @@ public enum Priority {
         return null;
     }
 
+    /*
+     *      CONVERTER
+     */
+
+    public CustomPriority toCustomPriority() {
+        return new CustomPriority(getName(), getColor(), getLevel());
+    }
+
+    /*
+     *      GETTER
+     */
+
     public String getName() {
         return name;
     }
@@ -45,10 +55,6 @@ public enum Priority {
 
     public String getColor() {
         return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public int getLevel() {

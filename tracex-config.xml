@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <loggers>
     <logger>
-        <package>fr.florian.tracex</package>
+        <configuration>
+            <name>CANDIBOT</name>
+            <package>fr.florian.tracex</package>
+            <version>2.0</version>
+        </configuration>
         <appenders>
             <console>
-                <name>TRACEX</name>
                 <format>{line} ({trace}) [{name}] [{type}] {date} : {message}</format>
-                <line>1</line>
                 <colored>true</colored>
                 <priority>ALL</priority>
             </console>

@@ -2,7 +2,7 @@ package fr.florian.tracex.appenders;
 
 import fr.florian.tracex.TraceX;
 import fr.florian.tracex.TraceListener;
-import fr.florian.tracex.enums.Priority;
+import fr.florian.tracex.priority.Priority;
 import fr.florian.tracex.objects.TraceMessage;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -19,17 +19,18 @@ public class ConsoleAppender implements TraceListener {
 
     private boolean colored = true;
     private String format = "{line} ({trace}) [{name}] [{type}] {date} : {message}";
-    private String name = "LOGGER", version = null;
     private long processId = ProcessHandle.current().pid();
     private String dateFormat = "yyyy-MM-dd HH:mm:ss.SSS";
     private ZoneId zoneId = ZoneId.systemDefault();
-    private BigInteger nextLine = new BigInteger("1");
+    private static BigInteger nextLine = new BigInteger("1");
 
-    public ConsoleAppender() {
-
+    public ConsoleAppender(TraceX traceX) {
+        this.traceX = traceX;
     }
 
-    public ConsoleAppender(NodeList nodeList) {
+    public ConsoleAppender(TraceX traceX, Node node) {
+        this.traceX = traceX;
+        NodeList nodeList = node.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node nodeAt = nodeList.item(i);
             if (nodeAt.getNodeType() == Node.ELEMENT_NODE
@@ -37,10 +38,6 @@ public class ConsoleAppender implements TraceListener {
                     && nodeAt.getTextContent().length() > 0) {
                 if (nodeAt.getNodeName().equals("format")) {
                     setFormat(nodeAt.getTextContent());
-                } else if (nodeAt.getNodeName().equals("name")) {
-                    setName(nodeAt.getTextContent());
-                } else if(nodeAt.getNodeName().equals("line")) {
-                    setNextLine(new BigInteger(nodeAt.getTextContent()));
                 } else if (nodeAt.getNodeName().equals("colored")) {
                     setColored(Boolean.parseBoolean(nodeAt.getTextContent()));
                 } else if (nodeAt.getNodeName().equals("priority")) {
@@ -53,15 +50,15 @@ public class ConsoleAppender implements TraceListener {
 
     @Override
     public void onLogEvent(TraceMessage message) {
-        if (message.getPriority().getLevel() < getPriority().getLevel()) return;
+        if (message.getCustomPriority().getLevel() < getPriority().getLevel()) return;
         String messageStr = (message.getData() != null) ? message.getData().toString() : "null";
         String result = format;
         result = result.replaceAll("\\{line}", nextLine.toString());
         result = result.replaceAll("\\{trace}", getFormattedTrace());
-        result = result.replaceAll("\\{name}", name);
-        result = result.replaceAll("\\{version}", version);
+        result = result.replaceAll("\\{name}", getTraceX().getAppName());
+        result = result.replaceAll("\\{version}", getTraceX().getAppVersion());
         result = result.replaceAll("\\{process}", String.valueOf(processId));
-        result = result.replaceAll("\\{type}", (colored) ? message.getPriority().getPrefixColored() : message.getPriority().getPrefix());
+        result = result.replaceAll("\\{type}", (colored) ? message.getCustomPriority().getPrefixColored() : message.getCustomPriority().getPrefix());
         result = result.replaceAll("\\{date}", getFormattedDate(message.getZonedDateTime()));
         result = result.replaceAll("\\{message}", messageStr);
         System.out.println(result);
@@ -113,22 +110,6 @@ public class ConsoleAppender implements TraceListener {
 
     public void setFormat(String format) {
         this.format = format;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 
     public long getProcessId() {
