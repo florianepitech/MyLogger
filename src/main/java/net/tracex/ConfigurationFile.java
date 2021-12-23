@@ -47,10 +47,10 @@ class ConfigurationFile {
      */
 
     private static TraceX parseTraceX(Node node) throws ClassNotFoundException {
-        String packageName = getNodeString(node, "package");
+        String className = getNodeString(node, "class");
         String appName = getNodeString(node, "name");
         String appVersion = getNodeString(node, "version");
-        TraceX traceX = TraceX.getInstance(packageName);
+        TraceX traceX = TraceX.getInstance(className);
         if (appName != null) traceX.setAppName(appName);
         if (appVersion != null) traceX.setAppVersion(appVersion);
         return traceX;
