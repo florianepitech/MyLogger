@@ -1,12 +1,12 @@
-package fr.florian.tracex.appenders;
+package net.tracex.appenders;
 
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import fr.florian.tracex.TraceX;
-import fr.florian.tracex.TraceListener;
-import fr.florian.tracex.priority.Priority;
-import fr.florian.tracex.objects.TraceMessage;
+import net.tracex.TraceX;
+import net.tracex.TraceListener;
+import net.tracex.priority.Priority;
+import net.tracex.objects.TraceMessage;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.w3c.dom.NodeList;

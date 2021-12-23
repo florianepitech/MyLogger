@@ -1,6 +1,6 @@
-package fr.florian.tracex.utils;
+package net.tracex.utils;
 
-import fr.florian.tracex.objects.TraceMessage;
+import net.tracex.objects.TraceMessage;
 
 public class MessageParser {
 

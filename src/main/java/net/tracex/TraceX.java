@@ -1,10 +1,8 @@
-package fr.florian.tracex;
+package net.tracex;
 
-import fr.florian.tracex.priority.CustomPriority;
-import fr.florian.tracex.priority.Priority;
-import fr.florian.tracex.exceptions.UnknownPackageException;
-import fr.florian.tracex.objects.TraceMessage;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import net.tracex.priority.CustomPriority;
+import net.tracex.priority.Priority;
+import net.tracex.objects.TraceMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,14 +17,14 @@ public class TraceX {
 
     private String appName = "TRACE-X", appVersion = "1";
     private List<TraceListener> listeners = new ArrayList<TraceListener>();
-    private Package p;
+    private Class classReferenced;
 
     /*
      *      CONSTRUCTOR
      */
 
-    private TraceX(Package p) {
-        this.p = p;
+    private TraceX(Class classReferenced) {
+        this.classReferenced = classReferenced;
         loggers.add(this);
     }
 
@@ -34,36 +32,23 @@ public class TraceX {
      *      STATIC FUNCTION
      */
 
-    public static TraceX getInstance(Package p) {
-        for (TraceX traceX : loggers) {
-            if (p.equals(traceX.getPackage())) return traceX;
-        }
-        return new TraceX(p);
-    }
-
     public static TraceX getInstance(Class c) {
-        return getInstance(c.getPackage());
-    }
-
-    public static TraceX getInstance(String packageName) throws UnknownPackageException {
-        Package p = getPackage(packageName);
-        if (p == null) throw new UnknownPackageException(packageName);
-        return getInstance(p);
-    }
-
-    private static Package getPackage(String packageName) {
-        for (Package p : Package.getPackages()) {
-            if (p.getName().equals(packageName)) return p;
-            if (p.getName().startsWith(packageName)) return p;
+        for (TraceX traceX : loggers) {
+            if (c.getName().equals(traceX.getClassReference().getName())) return traceX;
         }
-        return null;
+        return new TraceX(c);
+    }
+
+    public static TraceX getInstance(String className) throws ClassNotFoundException {
+        Class c = Class.forName(className);
+        return getInstance(c);
     }
 
     private static void addTraceX(TraceX traceX) {
         if (!loggers.contains(traceX)) loggers.add(traceX);
     }
 
-    public static void readConfigurationFile(String filePath) throws ParserConfigurationException, IOException, URISyntaxException, SAXException, UnknownPackageException {
+    public static void readConfigurationFile(String filePath) throws ParserConfigurationException, IOException, URISyntaxException, SAXException, ClassNotFoundException {
         ConfigurationFile.readConfiguration(filePath);
     }
 
@@ -138,8 +123,8 @@ public class TraceX {
         return listeners;
     }
 
-    public Package getPackage() {
-        return p;
+    public Class getClassReference() {
+        return classReferenced;
     }
 
     public String getAppName() {

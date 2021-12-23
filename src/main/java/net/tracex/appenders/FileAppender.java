@@ -1,7 +1,7 @@
-package fr.florian.tracex.appenders;
+package net.tracex.appenders;
 
-import fr.florian.tracex.TraceListener;
-import fr.florian.tracex.objects.TraceMessage;
+import net.tracex.TraceListener;
+import net.tracex.objects.TraceMessage;
 
 import java.io.BufferedWriter;
 import java.io.File;

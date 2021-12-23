@@ -1,4 +1,4 @@
-package fr.florian.tracex.utils;
+package net.tracex.utils;
 
 public class ConsoleColors {
 

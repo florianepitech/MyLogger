@@ -1,9 +1,9 @@
-package fr.florian.tracex.appenders;
+package net.tracex.appenders;
 
-import fr.florian.tracex.TraceX;
-import fr.florian.tracex.TraceListener;
-import fr.florian.tracex.priority.Priority;
-import fr.florian.tracex.objects.TraceMessage;
+import net.tracex.TraceX;
+import net.tracex.TraceListener;
+import net.tracex.priority.Priority;
+import net.tracex.objects.TraceMessage;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

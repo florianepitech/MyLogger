@@ -1,6 +1,6 @@
-package fr.florian.tracex.priority;
+package net.tracex.priority;
 
-import fr.florian.tracex.utils.ConsoleColors;
+import net.tracex.utils.ConsoleColors;
 
 public class CustomPriority {
 

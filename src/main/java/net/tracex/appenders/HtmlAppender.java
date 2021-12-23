@@ -1,8 +1,8 @@
-package fr.florian.tracex.appenders;
+package net.tracex.appenders;
 
-import fr.florian.tracex.TraceX;
-import fr.florian.tracex.TraceListener;
-import fr.florian.tracex.objects.TraceMessage;
+import net.tracex.TraceX;
+import net.tracex.TraceListener;
+import net.tracex.objects.TraceMessage;
 
 public class HtmlAppender implements TraceListener {
 

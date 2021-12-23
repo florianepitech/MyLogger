@@ -1,4 +1,4 @@
-package fr.florian.tracex.appenders;
+package net.tracex.appenders;
 
 import java.time.ZonedDateTime;
 

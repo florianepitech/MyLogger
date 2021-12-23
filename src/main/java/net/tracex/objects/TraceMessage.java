@@ -1,6 +1,6 @@
-package fr.florian.tracex.objects;
+package net.tracex.objects;
 
-import fr.florian.tracex.priority.CustomPriority;
+import net.tracex.priority.CustomPriority;
 
 import java.time.ZonedDateTime;
 

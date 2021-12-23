@@ -1,6 +1,6 @@
-package fr.florian.tracex;
+package net.tracex;
 
-import fr.florian.tracex.objects.TraceMessage;
+import net.tracex.objects.TraceMessage;
 
 public interface TraceListener {
 

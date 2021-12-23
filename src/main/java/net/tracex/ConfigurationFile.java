@@ -1,8 +1,6 @@
-package fr.florian.tracex;
+package net.tracex;
 
-import fr.florian.tracex.appenders.ConsoleAppender;
-import fr.florian.tracex.appenders.MongoAppender;
-import fr.florian.tracex.exceptions.UnknownPackageException;
+import net.tracex.appenders.ConsoleAppender;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -19,7 +17,7 @@ import java.util.List;
 
 class ConfigurationFile {
 
-    public static void readConfiguration(String fileName) throws ParserConfigurationException, IOException, SAXException, URISyntaxException, UnknownPackageException {
+    public static void readConfiguration(String fileName) throws ParserConfigurationException, IOException, SAXException, URISyntaxException, ClassNotFoundException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = documentBuilderFactory.newDocumentBuilder();
         Document document = db.parse(new File(fileName));
@@ -48,7 +46,7 @@ class ConfigurationFile {
      *      PRIVATE FUNCTION
      */
 
-    private static TraceX parseTraceX(Node node) throws UnknownPackageException {
+    private static TraceX parseTraceX(Node node) throws ClassNotFoundException {
         String packageName = getNodeString(node, "package");
         String appName = getNodeString(node, "name");
         String appVersion = getNodeString(node, "version");
